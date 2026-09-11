@@ -12,9 +12,9 @@ posture, with real-time haptic feedback and ML-driven progress tracking.
 ## Repo structure
 ```bash
 postura/
-├── firmware/ Arduino/ESP32 firmware (posture detection + alerts)
-├── app/ Web app (dashboard, trends, ML improvement report)
-└── docs/ Slides, diagrams, and project documentation
+  ├── firmware/     Arduino/ESP32 firmware (posture detection + alerts)
+  ├── app/          Web app (dashboard, trends, ML improvement report)
+  └── docs/         Slides, diagrams, and project documentation
 ```
 
 
@@ -47,5 +47,3 @@ postura/
 - TinyML on-device posture context classification (sitting/standing/walking)
 - "Spine Health Score" dashboard with fatigue and long-term trend tracking
 - Pilot testing in real offices and university classrooms
-```
-```
