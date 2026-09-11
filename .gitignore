@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Node / future React Native app
+node_modules/
+build/
+dist/
+.expo/
+
+# Arduino
+*.hex
+*.bin
+
+# Editor
+.vscode/
+.idea/

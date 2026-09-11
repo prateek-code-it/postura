@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Postura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root[data-theme="light"] {
+    --bg: #EEF3FA;
+    --surface: #FFFFFF;
+    --surface-2: #F5F8FC;
+    --text: #1D2733;
+    --text-muted: #66768C;
+    --primary: #3E6FE0;
+    --primary-soft: #DCE6FA;
+    --good: #2E9E76;
+    --good-soft: #DEF2E9;
+    --moderate: #C6851F;
+    --moderate-soft: #FBEDD8;
+    --poor: #C9503F;
+    --poor-soft: #FBE3DF;
+    --border: #E1E8F2;
+    --shadow: 0 1px 2px rgba(30, 44, 70, 0.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D131C;
+    --surface: #161F2B;
+    --surface-2: #1C2634;
+    --text: #E8EEF7;
+    --text-muted: #8B9AB0;
+    --primary: #6E96F0;
+    --primary-soft: #22314D;
+    --good: #4FC79A;
+    --good-soft: #1B3327;
+    --moderate: #E8B252;
+    --moderate-soft: #35291A;
+    --poor: #E88476;
+    --poor-soft: #3A211E;
+    --border: #263243;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { display: flex; justify-content: center; }
+
+  .app {
+    width: 100%;
+    max-width: 420px;
+    min-height: 100vh;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Lexend', sans-serif;
+    margin: 0;
+  }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  /* ---- top bar ---- */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 20px 8px 20px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark {
+    width: 30px; height: 30px; border-radius: 9px;
+    background: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-mark svg { width: 16px; height: 16px; }
+  .brand-name { font-size: 18px; font-weight: 600; color: var(--text); }
+
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .icon-btn svg { width: 17px; height: 17px; stroke: var(--text); }
+
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 20px;
+    background: var(--surface); border: 1px solid var(--border);
+    font-size: 12.5px; color: var(--text-muted);
+    margin: 4px 20px 0 20px;
+    width: fit-content;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--good); }
+  .dot.off { background: var(--text-muted); }
+
+  /* ---- content area ---- */
+  .screen { flex: 1; padding: 18px 20px 100px 20px; display: none; }
+  .screen.active { display: block; }
+
+  /* ---- hero (spine) ---- */
+  .hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 26px 20px 22px 20px;
+    text-align: center;
+    margin-top: 14px;
+  }
+  .hero-label { font-size: 13.5px; color: var(--text-muted); margin-bottom: 2px; }
+  .hero-status {
+    font-family: 'Lexend', sans-serif;
+    font-size: 24px; font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .spine-wrap { display: flex; justify-content: center; margin: 6px 0 10px 0; }
+  .hero-stats { display: flex; justify-content: center; gap: 26px; margin-top: 8px; }
+  .hero-stat-num { font-size: 20px; font-weight: 600; }
+  .hero-stat-lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ---- cards ---- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    margin-top: 14px;
+  }
+  .card-title { font-size: 15px; font-weight: 600; margin-bottom: 14px; }
+  .row-between { display: flex; align-items: center; justify-content: space-between; }
+
+  .score-big { font-size: 34px; font-weight: 700; font-family: 'Lexend', sans-serif; }
+  .chip {
+    padding: 4px 10px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
+  }
+  .chip.good { background: var(--good-soft); color: var(--good); }
+  .chip.moderate { background: var(--moderate-soft); color: var(--moderate); }
+  .chip.poor { background: var(--poor-soft); color: var(--poor); }
+
+  .bars { display: flex; align-items: flex-end; gap: 8px; height: 120px; margin-top: 10px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .bar { width: 100%; border-radius: 6px 6px 3px 3px; transition: height 0.4s ease; }
+  .bar-day { font-size: 11px; color: var(--text-muted); }
+
+  .insight-line {
+    display: flex; gap: 10px; padding: 10px 0;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px; line-height: 1.45; color: var(--text);
+  }
+  .insight-line:first-of-type { border-top: none; padding-top: 2px; }
+  .insight-dot { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); margin-top: 6px; }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+  .stat-box { background: var(--surface-2); border-radius: 14px; padding: 12px 14px; }
+  .stat-box .num { font-size: 20px; font-weight: 700; font-family: 'Lexend', sans-serif; }
+  .stat-box .lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .setting-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; border-top: 1px solid var(--border);
+  }
+  .setting-row:first-child { border-top: none; }
+  .setting-title { font-size: 14.5px; font-weight: 500; }
+  .setting-sub { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+
+  .switch { width: 44px; height: 26px; border-radius: 20px; background: var(--border); position: relative; cursor: pointer; flex-shrink: 0; }
+  .switch.on { background: var(--primary); }
+  .switch-knob { width: 20px; height: 20px; border-radius: 50%; background: #fff; position: absolute; top: 3px; left: 3px; transition: left 0.18s ease; }
+  .switch.on .switch-knob { left: 21px; }
+
+  .threshold-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; font-size: 13.5px; }
+  .threshold-swatch { width: 12px; height: 12px; border-radius: 4px; flex-shrink: 0; }
+
+  /* ---- bottom nav ---- */
+  .tabbar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    display: flex; justify-content: space-around;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 10px 6px calc(10px + env(safe-area-inset-bottom, 0px)) 6px;
+  }
+  .tab {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 11px; padding: 4px 10px;
+  }
+  .tab svg { width: 21px; height: 21px; stroke: var(--text-muted); fill: none; stroke-width: 1.7; }
+  .tab.active { color: var(--primary); }
+  .tab.active svg { stroke: var(--primary); }
+
+  .trend-svg { width: 100%; height: auto; display: block; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 2v3M12 19v3M9 6c0 2 1.5 2 1.5 4s-1.5 2-1.5 4 1.5 2 1.5 4"/></svg>
+      </div>
+      <div class="brand-name">Postura</div>
+    </div>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle theme"></button>
+  </div>
+  <div class="status-pill"><span class="dot" id="connDot"></span><span id="connText">Neckband connected</span></div>
+
+  <!-- TODAY -->
+  <div class="screen active" id="screen-today">
+    <div class="hero">
+      <div class="hero-label">Right now</div>
+      <div class="hero-status" id="heroStatus">Good posture</div>
+      <div class="spine-wrap">
+        <svg id="spineSvg" viewBox="0 0 160 220" width="140" height="192">
+          <rect x="60" y="4" width="40" height="20" rx="8" fill="var(--surface-2)" stroke="var(--border)"/>
+          <circle cx="80" cy="14" r="3" id="ledDot" fill="var(--good)"/>
+          <path id="spinePath" d="M80,26 Q80,120 80,214" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/>
+          <g id="vertebrae"></g>
+        </svg>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num mono" id="angleReadout">6°</div>
+          <div class="hero-stat-lbl">spine angle</div>
+        </div>
+        <div>
+          <div class="hero-stat-num mono" id="todayScoreReadout">88</div>
+          <div class="hero-stat-lbl">today's score</div>
+        </div>
+        <div>
+          <div class="hero-stat-num mono" id="streakReadout">5</div>
+          <div class="hero-stat-lbl">day streak</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row-between">
+        <div class="card-title" style="margin-bottom:0;">Good posture today</div>
+        <span class="mono" id="goodTimeReadout" style="font-size:14px;color:var(--text-muted);">0m</span>
+      </div>
+      <div style="height:8px;border-radius:6px;background:var(--surface-2);margin-top:12px;overflow:hidden;">
+        <div id="goodTimeBar" style="height:100%;width:0%;background:var(--good);border-radius:6px;transition:width 0.6s ease;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRENDS -->
+  <div class="screen" id="screen-trends">
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">Last 7 days</div>
+      <div class="bars" id="weekBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">14-day pattern</div>
+      <svg class="trend-svg" id="trendMini" viewBox="0 0 320 90"></svg>
+    </div>
+    <div class="card">
+      <div class="stat-grid">
+        <div class="stat-box"><div class="num" id="bestDayNum">-</div><div class="lbl">Best day score</div></div>
+        <div class="stat-box"><div class="num" id="avgNum">-</div><div class="lbl">14-day average</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORT (ML) -->
+  <div class="screen" id="screen-report">
+    <div class="card" style="margin-top:14px;">
+      <div class="row-between">
+        <div class="card-title" style="margin-bottom:0;">Daily improvement report</div>
+        <span class="chip good" id="changeChip">+0%</span>
+      </div>
+      <div style="color:var(--text-muted);font-size:12.5px;margin-top:4px;">This week vs. last week, from your trend model</div>
+      <svg class="trend-svg" id="reportChart" viewBox="0 0 320 130" style="margin-top:14px;"></svg>
+    </div>
+    <div class="card">
+      <div class="stat-grid">
+        <div class="stat-box"><div class="num" id="thisWeekNum">-</div><div class="lbl">This week avg</div></div>
+        <div class="stat-box"><div class="num" id="lastWeekNum">-</div><div class="lbl">Last week avg</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Insights</div>
+      <div id="insightsList"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="screen" id="screen-settings">
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">Device</div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-title">Neckband connection</div>
+          <div class="setting-sub">Simulated for this preview</div>
+        </div>
+        <div class="switch on" id="connSwitch"><div class="switch-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-title">Vibration alerts</div>
+          <div class="setting-sub">Buzz after sustained poor posture</div>
+        </div>
+        <div class="switch on" id="vibSwitch"><div class="switch-knob"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Appearance</div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-title">Dark theme</div>
+          <div class="setting-sub">Matches your system by default</div>
+        </div>
+        <div class="switch" id="darkSwitch"><div class="switch-knob"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Posture thresholds</div>
+      <div class="threshold-row"><span class="threshold-swatch" style="background:var(--good);"></span>Good — 0° to 15°</div>
+      <div class="threshold-row"><span class="threshold-swatch" style="background:var(--moderate);"></span>Moderate — 15° to 30°</div>
+      <div class="threshold-row"><span class="threshold-swatch" style="background:var(--poor);"></span>Poor — over 30°, alerts after 60s</div>
+    </div>
+  </div>
+
+  <div class="tabbar">
+    <button class="tab active" data-tab="today">
+      <svg viewBox="0 0 24 24"><path d="M4 12l8-8 8 8M6 10v10h12V10"/></svg>
+      Today
+    </button>
+    <button class="tab" data-tab="trends">
+      <svg viewBox="0 0 24 24"><path d="M4 19V9M11 19V4M18 19v-6"/></svg>
+      Trends
+    </button>
+    <button class="tab" data-tab="report">
+      <svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+      Report
+    </button>
+    <button class="tab" data-tab="settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.07-.4.1-.8.1-1.2z"/></svg>
+      Settings
+    </button>
+  </div>
+</div>
+
+<script>
+  // ---------- theme ----------
+  const root = document.documentElement;
+  function setTheme(dark) {
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    document.getElementById('darkSwitch').classList.toggle('on', dark);
+    renderThemeIcon(dark);
+  }
+  function renderThemeIcon(dark) {
+    const btn = document.getElementById('themeBtn');
+    btn.innerHTML = dark
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke-linecap="round"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>';
+    btn.querySelector('svg').style.stroke = 'var(--text)';
+    btn.querySelector('svg').style.width = '17px';
+    btn.querySelector('svg').style.height = '17px';
+  }
+  let isDark = false;
+  setTheme(isDark);
+  document.getElementById('themeBtn').addEventListener('click', () => { isDark = !isDark; setTheme(isDark); });
+  document.getElementById('darkSwitch').addEventListener('click', () => { isDark = !isDark; setTheme(isDark); });
+
+  // ---------- tabs ----------
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('screen-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ---------- simple switches ----------
+  ['vibSwitch'].forEach(id => {
+    document.getElementById(id).addEventListener('click', function () { this.classList.toggle('on'); });
+  });
+  document.getElementById('connSwitch').addEventListener('click', function () {
+    this.classList.toggle('on');
+    const connected = this.classList.contains('on');
+    document.getElementById('connDot').classList.toggle('off', !connected);
+    document.getElementById('connText').textContent = connected ? 'Neckband connected' : 'Neckband disconnected';
+  });
+
+  // ---------- status helper ----------
+  function bandFor(angle) {
+    if (angle <= 15) return { key: 'good', label: 'Good posture', color: 'var(--good)' };
+    if (angle <= 30) return { key: 'moderate', label: 'Moderate slouch', color: 'var(--moderate)' };
+    return { key: 'poor', label: 'Poor posture', color: 'var(--poor)' };
+  }
+  function scoreBand(score) {
+    if (score >= 75) return 'good';
+    if (score >= 50) return 'moderate';
+    return 'poor';
+  }
+  const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  // ---------- spine visual ----------
+  const vertebraeG = document.getElementById('vertebrae');
+  const vCount = 7;
+  for (let i = 0; i < vCount; i++) {
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('r', 4.5);
+    c.id = 'vert' + i;
+    vertebraeG.appendChild(c);
+  }
+  function bezierPoint(t, p0, p1, p2) {
+    const x = (1 - t) * (1 - t) * p0.x + 2 * (1 - t) * t * p1.x + t * t * p2.x;
+    const y = (1 - t) * (1 - t) * p0.y + 2 * (1 - t) * t * p1.y + t * t * p2.y;
+    return { x, y };
+  }
+  function drawSpine(angle) {
+    const offset = (angle / 40) * 46;
+    const p0 = { x: 80, y: 26 }, p1 = { x: 80 + offset, y: 120 }, p2 = { x: 80, y: 214 };
+    document.getElementById('spinePath').setAttribute('d', `M${p0.x},${p0.y} Q${p1.x},${p1.y} ${p2.x},${p2.y}`);
+    const band = bandFor(angle);
+    for (let i = 0; i < vCount; i++) {
+      const t = (i + 1) / (vCount + 1);
+      const pt = bezierPoint(t, p0, p1, p2);
+      const el = document.getElementById('vert' + i);
+      el.setAttribute('cx', pt.x);
+      el.setAttribute('cy', pt.y);
+      el.setAttribute('fill', cssVar('--surface'));
+      el.setAttribute('stroke', band.color.startsWith('var') ? cssVar(band.color.slice(4, -1)) : band.color);
+      el.setAttribute('stroke-width', 2.2);
+    }
+    document.getElementById('ledDot').setAttribute('fill', cssVar(band.color.slice(4, -1)));
+  }
+
+  // ---------- live simulation ----------
+  let currentAngle = 8;
+  let targetAngle = 8;
+  let todayGoodSec = 0, todayTotalSec = 0;
+  let streak = 5;
+
+  function animateTo(target) {
+    const start = currentAngle, startTime = performance.now(), dur = 700;
+    function step(now) {
+      const t = Math.min(1, (now - startTime) / dur);
+      currentAngle = start + (target - start) * t;
+      updateHeroReadouts();
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function updateHeroReadouts() {
+    drawSpine(currentAngle);
+    document.getElementById('angleReadout').textContent = Math.round(currentAngle) + '°';
+    const band = bandFor(currentAngle);
+    const statusEl = document.getElementById('heroStatus');
+    statusEl.textContent = band.label;
+    statusEl.style.color = cssVar(band.color.slice(4, -1));
+  }
+
+  function tickLive() {
+    // random walk, occasional slouch event
+    const drift = (Math.random() - 0.55) * 8;
+    targetAngle = Math.max(2, Math.min(38, targetAngle + drift));
+    if (Math.random() < 0.08) targetAngle = 20 + Math.random() * 16; // occasional slouch spike
+    animateTo(targetAngle);
+
+    todayTotalSec += 2;
+    if (currentAngle <= 15) todayGoodSec += 2;
+    const pct = Math.round((todayGoodSec / todayTotalSec) * 100);
+    document.getElementById('todayScoreReadout').textContent = pct;
+    const mins = Math.floor(todayGoodSec / 60);
+    document.getElementById('goodTimeReadout').textContent = mins < 1 ? (todayGoodSec + 's') : (mins + 'm');
+    document.getElementById('goodTimeBar').style.width = pct + '%';
+    document.getElementById('goodTimeBar').style.background = cssVar(bandFor(100 - pct <= 15 ? 5 : 20).color.slice(4,-1));
+    document.getElementById('streakReadout').textContent = streak;
+  }
+  setInterval(tickLive, 2000);
+  drawSpine(currentAngle);
+  updateHeroReadouts();
+
+  // ---------- synthetic history + "ML" trend model ----------
+  function generateHistory(days) {
+    let base = 50, arr = [];
+    for (let i = 0; i < days; i++) {
+      base += (Math.random() * 2.6 - 0.4);
+      const noise = (Math.random() * 16 - 8);
+      arr.push(Math.max(15, Math.min(97, Math.round(base + noise))));
+    }
+    return arr;
+  }
+  function linreg(arr) {
+    const n = arr.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    arr.forEach((y, x) => { sumX += x; sumY += y; sumXY += x * y; sumXX += x * x; });
+    const b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    const a = (sumY - b * sumX) / n;
+    return { a, b };
+  }
+
+  const history = generateHistory(14); // oldest -> newest
+  const lastWeek = history.slice(0, 7);
+  const thisWeek = history.slice(7, 14);
+  const avg = arr => Math.round(arr.reduce((s, v) => s + v, 0) / arr.length);
+  const lastWeekAvg = avg(lastWeek), thisWeekAvg = avg(thisWeek);
+  const pctChange = Math.round(((thisWeekAvg - lastWeekAvg) / lastWeekAvg) * 100);
+  const reg = linreg(history);
+
+  // longest recent streak of "good" days (score >= 75)
+  let s = 0;
+  for (let i = history.length - 1; i >= 0; i--) { if (history[i] >= 75) s++; else break; }
+  streak = s || 1;
+
+  // ---------- render trends tab ----------
+  const dayLetters = ['M','T','W','T','F','S','S'];
+  const weekBarsEl = document.getElementById('weekBars');
+  const last7 = history.slice(-7);
+  last7.forEach((val, i) => {
+    const col = document.createElement('div'); col.className = 'bar-col';
+    const bar = document.createElement('div'); bar.className = 'bar';
+    bar.style.height = val + '%';
+    bar.style.background = `var(--${scoreBand(val)})`;
+    const lbl = document.createElement('div'); lbl.className = 'bar-day'; lbl.textContent = dayLetters[i];
+    col.appendChild(bar); col.appendChild(lbl);
+    weekBarsEl.appendChild(col);
+  });
+
+  function drawLineChart(svgId, data, opts) {
+    const svg = document.getElementById(svgId);
+    const w = 320, h = opts.h || 90, pad = 8;
+    const max = 100, min = 0;
+    const step = (w - pad * 2) / (data.length - 1);
+    const pts = data.map((v, i) => {
+      const x = pad + i * step;
+      const y = h - pad - ((v - min) / (max - min)) * (h - pad * 2);
+      return [x, y];
+    });
+    const path = pts.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+    let extra = '';
+    if (opts.regression) {
+      const y0 = h - pad - ((opts.regression.a - min) / (max - min)) * (h - pad * 2);
+      const yN = h - pad - ((opts.regression.a + opts.regression.b * (data.length - 1) - min) / (max - min)) * (h - pad * 2);
+      extra += `<line x1="${pad}" y1="${y0}" x2="${w-pad}" y2="${yN}" stroke="var(--primary)" stroke-width="1.6" stroke-dasharray="4 4" opacity="0.7"/>`;
+    }
+    svg.innerHTML = `<path d="${path}" fill="none" stroke="var(--good)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${extra}` +
+      pts.map((p,i) => i === pts.length-1 ? `<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="var(--good)"/>` : '').join('');
+  }
+  drawLineChart('trendMini', history, { h: 90 });
+  drawLineChart('reportChart', history, { h: 130, regression: reg });
+
+  document.getElementById('bestDayNum').textContent = Math.max(...history);
+  document.getElementById('avgNum').textContent = avg(history);
+
+  // ---------- render report tab ----------
+  const changeChip = document.getElementById('changeChip');
+  changeChip.textContent = (pctChange >= 0 ? '+' : '') + pctChange + '%';
+  changeChip.className = 'chip ' + (pctChange >= 0 ? 'good' : 'poor');
+  document.getElementById('thisWeekNum').textContent = thisWeekAvg;
+  document.getElementById('lastWeekNum').textContent = lastWeekAvg;
+
+  const insights = [];
+  insights.push(pctChange >= 0
+    ? `Your posture score is up ${pctChange}% compared to last week — the trend model shows steady gains.`
+    : `Your posture score dipped ${Math.abs(pctChange)}% versus last week. Try a few extra stretch breaks tomorrow.`);
+  insights.push(`Your best day scored ${Math.max(...history)}, and your current good-posture streak is ${streak} day${streak === 1 ? '' : 's'}.`);
+  insights.push(`Based on your recent sessions, posture tends to dip most in the afternoon — a short stretch around 2–4 PM could help.`);
+  const insightsList = document.getElementById('insightsList');
+  insights.forEach(text => {
+    const row = document.createElement('div'); row.className = 'insight-line';
+    row.innerHTML = `<span class="insight-dot"></span><span>${text}</span>`;
+    insightsList.appendChild(row);
+  });
+</script>
+</body>
+</html>
