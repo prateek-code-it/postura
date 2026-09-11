@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Postura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root[data-theme="light"] {
+    --bg: #EEF3FA;
+    --surface: #FFFFFF;
+    --surface-2: #F5F8FC;
+    --text: #1D2733;
+    --text-muted: #66768C;
+    --primary: #3E6FE0;
+    --primary-soft: #DCE6FA;
+    --good: #2E9E76;
+    --good-soft: #DEF2E9;
+    --moderate: #C6851F;
+    --moderate-soft: #FBEDD8;
+    --poor: #C9503F;
+    --poor-soft: #FBE3DF;
+    --border: #E1E8F2;
+    --shadow: 0 1px 2px rgba(30, 44, 70, 0.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D131C;
+    --surface: #161F2B;
+    --surface-2: #1C2634;
+    --text: #E8EEF7;
+    --text-muted: #8B9AB0;
+    --primary: #6E96F0;
+    --primary-soft: #22314D;
+    --good: #4FC79A;
+    --good-soft: #1B3327;
+    --moderate: #E8B252;
+    --moderate-soft: #35291A;
+    --poor: #E88476;
+    --poor-soft: #3A211E;
+    --border: #263243;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { display: flex; justify-content: center; }
+
+  .app {
+    width: 100%;
+    max-width: 420px;
+    min-height: 100vh;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Lexend', sans-serif;
+    margin: 0;
+  }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  /* ---- top bar ---- */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 20px 8px 20px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark {
+    width: 30px; height: 30px; border-radius: 9px;
+    background: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-mark svg { width: 16px; height: 16px; }
+  .brand-name { font-size: 18px; font-weight: 600; color: var(--text); }
+
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .icon-btn svg { width: 17px; height: 17px; stroke: var(--text); }
+
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 20px;
+    background: var(--surface); border: 1px solid var(--border);
+    font-size: 12.5px; color: var(--text-muted);
+    margin: 4px 20px 0 20px;
+    width: fit-content;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--good); }
+  .dot.off { background: var(--text-muted); }
+
+  /* ---- content area ---- */
+  .screen { flex: 1; padding: 18px 20px 100px 20px; display: none; }
+  .screen.active { display: block; }
+
+  /* ---- hero (spine) ---- */
+  .hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 26px 20px 22px 20px;
+    text-align: center;
+    margin-top: 14px;
+  }
+  .hero-label { font-size: 13.5px; color: var(--text-muted); margin-bottom: 2px; }
+  .hero-status {
+    font-family: 'Lexend', sans-serif;
+    font-size: 24px; font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .spine-wrap { display: flex; justify-content: center; margin: 6px 0 10px 0; }
+  .hero-stats { display: flex; justify-content: center; gap: 26px; margin-top: 8px; }
+  .hero-stat-num { font-size: 20px; font-weight: 600; }
+  .hero-stat-lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ---- cards ---- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    margin-top: 14px;
+  }
+  .card-title { font-size: 15px; font-weight: 600; margin-bottom: 14px; }
+  .row-between { display: flex; align-items: center; justify-content: space-between; }
+
+  .score-big { font-size: 34px; font-weight: 700; font-family: 'Lexend', sans-serif; }
+  .chip {
+    padding: 4px 10px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
+  }
+  .chip.good { background: var(--good-soft); color: var(--good); }
+  .chip.moderate { background: var(--moderate-soft); color: var(--moderate); }
+  .chip.poor { background: var(--poor-soft); color: var(--poor); }
+
+  .bars { display: flex; align-items: flex-end; gap: 8px; height: 120px; margin-top: 10px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .bar { width: 100%; border-radius: 6px 6px 3px 3px; transition: height 0.4s ease; }
+  .bar-day { font-size: 11px; color: var(--text-muted); }
+
+  .insight-line {
+    display: flex; gap: 10px; padding: 10px 0;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px; line-height: 1.45; color: var(--text);
+  }
+  .insight-line:first-of-type { border-top: none; padding-top: 2px; }
+  .insight-dot { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); margin-top: 6px; }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+  .stat-box { background: var(--surface-2); border-radius: 14px; padding: 12px 14px; }
+  .stat-box .num { font-size: 20px; font-weight: 700; font-family: 'Lexend', sans-serif; }
+  .stat-box .lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .setting-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; border-top: 1px solid var(--border);
+  }
+  .setting-row:first-child { border-top: none; }
+  .setting-title { font-size: 14.5px; font-weight: 500; }
+  .setting-sub { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+
+  .switch { width: 44px; height: 26px; border-radius: 20px; background: var(--border); position: relative; cursor: pointer; flex-shrink: 0; }
+  .switch.on { background: var(--primary); }
+  .switch-knob { width: 20px; height: 20px; border-radius: 50%; background: #fff; position: absolute; top: 3px; left: 3px; transition: left 0.18s ease; }
+  .switch.on .switch-knob { left: 21px; }
+
+  .threshold-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; font-size: 13.5px; }
+  .threshold-swatch { width: 12px; height: 12px; border-radius: 4px; flex-shrink: 0; }
+
+  /* ---- bottom nav ---- */
+  .tabbar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    display: flex; justify-content: space-around;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 10px 6px calc(10px + env(safe-area-inset-bottom, 0px)) 6px;
+  }
+  .tab {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 11px; padding: 4px 10px;
+  }
+  .tab svg { width: 21px; height: 21px; stroke: var(--text-muted); fill: none; stroke-width: 1.7; }
+  .tab.active { color: var(--primary); }
+  .tab.active svg { stroke: var(--primary); }
+
+  .trend-svg { width: 100%; height: auto; display: block; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 2v3M12 19v3M9 6c0 2 1.5 2 1.5 4s-1.5 2-1.5 4 1.5 2 1.5 4"/></svg>
+      </div>
+      <div class="brand-name">Postura</div>
+    </div>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle theme"></button>
+  </div>
+  <div class="status-pill"><span class="dot" id="connDot"></span><span id="connText">Neckband connected</span></div>
+
+  <!-- TODAY -->
+  <div class="screen active" id="screen-today">
+    <div class="hero">
+      <div class="hero-label">Right now</div>
+      <div class="hero-status" id="heroStatus">Good posture</div>
+      <div class="spine-wrap">
+        <svg id="spineSvg" viewBox="0 0 160 220" width="140" height="192">
+          <rect x="60" y="4" width="40" height="20" rx="8" fill="var(--surface-2)" stroke="var(--border)"/>
+          <circle cx="80" cy="14" r="3" id="ledDot" fill="var(--good)"/>
+          <path id="spinePath" d="M80,26 Q80,120 80,214" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/>
+          <g id="vertebrae"></g>
+        </svg>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num mono" id="angleReadout">6°</div>
+          <div class="hero-stat-lbl">spine angle</div>
+        </div>
+        <div>
+          <div class="hero-stat-num mono" id="todayScoreReadout">88</div>
+          <div class="hero-stat-lbl">today's score</div>
+        </div>
+        <div>
+          <div class="hero-stat-num mono" id="streakReadout">5</div>
+          <div class="hero-stat-lbl">day streak</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row-between">
+        <div class="card-title" style="margin-bottom:0;">Good posture today</div>
+        <span class="mono" id="goodTimeReadout" style="font-size:14px;color:var(--text-muted);">0m</span>
+      </div>
+      <div style="height:8px;border-radius:6px;background:var(--surface-2);margin-top:12px;overflow:hidden;">
+        <div id="goodTimeBar" style="height:100%;width:0%;background:var(--good);border-radius:6px;transition:width 0.6s ease;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRENDS -->
+  <div class="screen" id="screen-trends">
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">Last 7 days</div>
+      <div class="bars" id="weekBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">14-day pattern</div>
+      <svg class="trend-svg" id="trendMini" viewBox="0 0 320 90"></svg>
+    </div>
+    <div class="card">
+      <div class="stat-grid">
+        <div class="stat-box"><div class="num" id="bestDayNum">-</div><div class="lbl">Best day score</div></div>
+        <div class="stat-box"><div class="num" id="avgNum">-</div><div class="lbl">14-day average</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORT (ML) -->
+  <div class="screen" id="screen-report">
+    <div class="card" style="margin-top:14px;">
+      <div class="row-between">
+        <div class="card-title" style="margin-bottom:0;">Daily improvement report</div>
+        <span class="chip good" id="changeChip">+0%</span>
+      </div>
+      <div style="color:var(--text-muted);font-size:12.5px;margin-top:4px;">This week vs. last week, from your trend model</div>
+      <svg class="trend-svg" id="reportChart" viewBox="0 0 320 130" style="margin-top:14px;"></svg>
+    </div>
+    <div class="card">
+      <div class="stat-grid">
+        <div class="stat-box"><div class="num" id="thisWeekNum">-</div><div class="lbl">This week avg</div></div>
+        <div class="stat-box"><div class="num" id="lastWeekNum">-</div><div class="lbl">Last week avg</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Insights</div>
+      <div id="insightsList"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="screen" id="screen-settings">
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">Device</div>
