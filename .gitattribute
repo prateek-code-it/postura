@@ -1,0 +1,21 @@
+# Handle line endings automatically for text files
+* text=auto
+
+# Explicitly declare text files to normalize to LF on check-in
+*.py text eol=lf
+*.js text eol=lf
+*.java text eol=lf
+*.c text eol=lf
+*.cpp text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+
+# Keep binary files untouched
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.zip binary
