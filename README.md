@@ -47,3 +47,6 @@ postura/
 - TinyML on-device posture context classification (sitting/standing/walking)
 - "Spine Health Score" dashboard with fatigue and long-term trend tracking
 - Pilot testing in real offices and university classrooms
+```bash
+Copyrights by 2026
+```
